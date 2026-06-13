@@ -188,7 +188,7 @@
   margin-top: 3rem;
   font-size: var(--t-small);
   letter-spacing: 0.12em;
-  color: rgba(245, 239, 232, 0.55);
+  color: rgba(245, 239, 232, 0.78);
 }
 
 /* ---------------- Promises ---------------- */
@@ -352,7 +352,7 @@
 }
 .footer__legal {
   font-size: var(--t-small);
-  color: rgba(245, 239, 232, 0.55);
+  color: rgba(245, 239, 232, 0.78);
   max-width: 60ch;
 }
 

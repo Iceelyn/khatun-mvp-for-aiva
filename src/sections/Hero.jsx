@@ -55,7 +55,7 @@ export default function Hero({ onStart }) {
           </span>
         </h2>
 
-        <p className="hero__sub">
+        <p className="hero__sub" lang="en">
           Wherever you are in your money journey, Khatun walks the next step with
           you — privately, in Mongolian.
         </p>

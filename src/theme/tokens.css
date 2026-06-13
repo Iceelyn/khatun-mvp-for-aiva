@@ -8,6 +8,9 @@
   --c-burgundy: #4b0a19;
   --c-gold: #c7a35a;
   --c-gold-soft: #e2c788;
+  /* darker antique-gold for SMALL text on cream (gold #c7a35a fails AA there);
+     #7e6228 ≈ 4.6:1 on cream while still reading as gold. */
+  --c-gold-ink: #7e6228;
   --c-rose: #d96c7a;
   --c-mauve: #bfa6a0;
   --c-ink: #1f1f1f;

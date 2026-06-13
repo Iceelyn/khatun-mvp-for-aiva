@@ -99,7 +99,7 @@ button {
   font-weight: 500;
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: var(--c-gold);
+  color: var(--c-gold-ink);
 }
 
 .gold-text {
