@@ -28,7 +28,7 @@ src/
   data/         questions.js (U-Report intake)
   hooks/        useReducedMotion, useGsapReveal
   lib/          api.js (calls /api/*)
-  assets/brand/ emblem.svg, favicon.svg  (drop logo-full.svg here when ready)
+  assets/brand/ khatun-logo.png  (official logo — used in nav, hero, result, favicon)
 server/         index.js, prompt.js, .env.example
 qa/             smoke.mjs (Playwright QA)
 ```
