@@ -1,0 +1,61 @@
+/* ============================================================
+   Khatun — app-level component styles
+   (sections have their own files; this holds nav + shared bits)
+   ============================================================ */
+
+/* --- Wordmark + emblem --- */
+.wordmark {
+  font-family: var(--f-display);
+  font-weight: 700;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--c-wine);
+  line-height: 1;
+}
+.emblem {
+  user-select: none;
+  filter: drop-shadow(0 6px 14px rgba(75, 10, 25, 0.18));
+}
+
+/* --- Nav --- */
+.nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 100;
+  transition: background var(--d-base) var(--ease),
+    box-shadow var(--d-base) var(--ease), backdrop-filter var(--d-base) var(--ease);
+}
+.nav--scrolled {
+  background: rgba(245, 239, 232, 0.82);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 1px 0 var(--hairline-gold);
+}
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 1rem;
+}
+.nav__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.nav__wordmark {
+  font-size: 1.15rem;
+}
+.nav__cta {
+  min-height: 44px;
+  padding: 0.6rem 1.5rem;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 480px) {
+  .nav__wordmark {
+    font-size: 1rem;
+    letter-spacing: 0.26em;
+  }
+  .nav__cta {
+    padding: 0.55rem 1.15rem;
+  }
+}
