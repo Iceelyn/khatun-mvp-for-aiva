@@ -96,7 +96,7 @@ export default function Demo({ onClose }) {
 
   return (
     <div
-      className="demo"
+      className={`demo ${stage === STAGE.RESULT ? 'demo--result' : ''}`}
       role="dialog"
       aria-modal="true"
       aria-label="Хатуны асуулга"
@@ -176,22 +176,14 @@ export default function Demo({ onClose }) {
       )}
 
       {stage === STAGE.RESULT && (
-        <div className="demo__result-wrap">
-          <Result
-            reply={reply}
-            onFollowUp={onFollowUp}
-            followUps={followUps}
-            loadingFollowUp={loadingFollowUp}
-          />
-          <div className="demo__result-actions">
-            <button className="btn btn--ghost" onClick={restart}>
-              Дахин эхлэх
-            </button>
-            <button className="btn btn--gold" onClick={onClose}>
-              Дуусгах
-            </button>
-          </div>
-        </div>
+        <Result
+          reply={reply}
+          onFollowUp={onFollowUp}
+          followUps={followUps}
+          loadingFollowUp={loadingFollowUp}
+          onRestart={restart}
+          onClose={onClose}
+        />
       )}
 
       {stage === STAGE.ERROR && (
