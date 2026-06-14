@@ -7,13 +7,12 @@ export default function Emblem({ size = 40, className = '', alt = 'Хатун' }
   return (
     <img
       src={logoUrl}
-      width={size}
-      height={size}
       alt={alt}
       className={`emblem ${className}`}
       draggable="false"
       loading="eager"
       decoding="async"
+      style={{ height: size, width: 'auto' }}
     />
   )
 }
