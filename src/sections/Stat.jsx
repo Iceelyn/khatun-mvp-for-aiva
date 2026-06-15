@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import useReducedMotion from '../hooks/useReducedMotion'
+import { useT } from '../i18n/index.jsx'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -45,28 +46,23 @@ function CountFigure({ value, suffix = '%', className }) {
 }
 
 export default function Stat() {
+  const { t } = useT()
   return (
     <section className="section stat">
       <div className="container stat__grid">
         <div className="stat__item">
           <CountFigure value={71} className="stat__figure stat__figure--wine" />
-          <p className="stat__caption">
-            Эмэгтэйчүүдийн <strong>71%</strong> нь хөрөнгө оруулалт нь үе
-            дамжсан баялгийг бий болгох арга зам гэдэгтэй санал нийлдэг.
-          </p>
+          <p className="stat__caption">{t('stat.cap71')}</p>
         </div>
 
         <span className="stat__divider" aria-hidden="true" />
 
         <div className="stat__item">
           <CountFigure value={14} className="stat__figure stat__figure--gold" />
-          <p className="stat__caption">
-            Гэтэл ердөө <strong>14%</strong> нь хөрөнгө оруулалтын мэдлэгтээ
-            өндөр итгэлтэй байдаг.
-          </p>
+          <p className="stat__caption">{t('stat.cap14')}</p>
         </div>
       </div>
-      <p className="stat__source container">Fidelity Investments, 2024.</p>
+      <p className="stat__source container">{t('stat.source')}</p>
     </section>
   )
 }

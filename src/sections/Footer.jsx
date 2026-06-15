@@ -1,32 +1,33 @@
 import Emblem from '../components/Emblem'
 import Wordmark from '../components/Wordmark'
-
-const VALUES = ['Power', 'Elegance', 'Growth', 'Knowledge']
+import { useT, format } from '../i18n/index.jsx'
 
 export default function Footer() {
+  const { t } = useT()
+  const values = t('footer.values')
+
   return (
     <footer className="footer">
       <div className="container footer__inner">
         <div className="footer__brand">
           <Emblem size={56} />
           <Wordmark className="footer__wordmark" />
-          <p className="footer__tagline">Санхүүгийн дараагийн алхам</p>
+          <p className="footer__tagline">{t('footer.tagline')}</p>
         </div>
 
         <hr className="rule" />
 
         <div className="footer__row">
-          <p className="footer__mission">Empower women • Build wealth</p>
+          <p className="footer__mission">{t('footer.mission')}</p>
           <ul className="footer__values">
-            {VALUES.map((v) => (
+            {values.map((v) => (
               <li key={v}>{v}</li>
             ))}
           </ul>
         </div>
 
         <p className="footer__legal">
-          Хатун нь найрсаг чиглүүлэг өгдөг — лицензтэй санхүүгийн зөвлөгөө биш.
-          Эцсийн шийдвэр чинийх. © {new Date().getFullYear()} Khatun.
+          {format(t('footer.legal'), { year: new Date().getFullYear() })}
         </p>
       </div>
     </footer>
