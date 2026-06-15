@@ -17,6 +17,18 @@
   --c-green: #2f7d5c;
   --c-blue: #4c6f91;
 
+  /* dark-luxury surfaces (full dark theme) */
+  --c-bg: #29060f;
+  --c-bg-2: #3a0a17;
+  --c-maroon: #6b1528;
+  --c-maroon-deep: #4b0a19;
+  --c-text: #f5efe8;
+  --c-muted: rgba(245, 239, 232, 0.72);
+  --c-faint: rgba(245, 239, 232, 0.5);
+
+  /* metallic gold gradient + foil */
+  --grad-gold: linear-gradient(120deg, #f3e3b6 0%, #c7a35a 42%, #9a7b38 66%, #e2c788 100%);
+
   /* surfaces / lines */
   --hairline: rgba(122, 15, 28, 0.16);
   --hairline-gold: rgba(199, 163, 90, 0.5);

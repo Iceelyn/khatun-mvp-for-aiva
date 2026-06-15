@@ -25,12 +25,8 @@
   align-items: center;
   overflow: hidden;
   background:
-    radial-gradient(
-      120% 90% at 50% -10%,
-      rgba(233, 221, 213, 0.9),
-      transparent 60%
-    ),
-    var(--c-cream);
+    radial-gradient(120% 90% at 50% -8%, rgba(199, 163, 90, 0.18), transparent 58%),
+    linear-gradient(165deg, #2c0712 0%, #4b0a19 55%, #29060f 100%);
 }
 .gold-dust {
   position: absolute;
@@ -72,11 +68,15 @@
 }
 .hero__line--accent {
   font-style: italic;
-  color: var(--c-wine);
+  background: var(--grad-gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 .hero__sub {
   font-size: var(--t-lead);
-  color: #5c534c;
+  color: var(--c-muted);
   max-width: 48ch;
   margin: 0 auto 2.5rem;
 }
@@ -134,10 +134,13 @@
 }
 .problem__head em {
   font-style: italic;
+  color: var(--c-gold-soft);
+  font-family: var(--f-body);
+  font-size: 0.92em;
 }
 .problem__body {
   font-size: var(--t-lead);
-  color: #5c534c;
+  color: var(--c-muted);
   max-width: 56ch;
 }
 
@@ -214,7 +217,7 @@
   gap: clamp(1.5rem, 4vw, 3.5rem);
   align-items: center;
   padding-bottom: clamp(2.5rem, 5vw, 4.5rem);
-  border-bottom: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline-gold);
 }
 .promise:last-child {
   border-bottom: none;
@@ -239,7 +242,7 @@
 }
 .promise__text p {
   font-size: var(--t-lead);
-  color: #5c534c;
+  color: var(--c-muted);
   max-width: 50ch;
 }
 .promise--climax {
@@ -254,26 +257,22 @@
   margin-top: 1rem;
 }
 .promise--climax .promise__text h3 {
-  color: var(--c-wine);
+  color: var(--c-gold-soft);
   font-size: var(--t-h2);
 }
 .promise__subtext {
   margin-top: 1rem;
   font-size: clamp(1.3rem, 2.4vw, 2rem);
   font-style: italic;
-  color: var(--c-wine);
+  color: var(--c-gold-soft);
 }
 
 /* ---------------- Closing CTA ---------------- */
 .closing {
   text-align: center;
   background:
-    radial-gradient(
-      100% 100% at 50% 0%,
-      rgba(233, 221, 213, 0.7),
-      transparent 70%
-    ),
-    var(--c-cream);
+    radial-gradient(100% 100% at 50% 0%, rgba(199, 163, 90, 0.16), transparent 68%),
+    linear-gradient(180deg, #29060f, #4b0a19);
 }
 .closing__inner {
   display: flex;
@@ -290,7 +289,7 @@
 }
 .closing__sub {
   font-size: var(--t-lead);
-  color: #5c534c;
+  color: var(--c-muted);
   max-width: 46ch;
   margin-bottom: 2.5rem;
 }
@@ -315,6 +314,7 @@
   margin-bottom: 2.5rem;
 }
 .footer__wordmark {
+  -webkit-text-fill-color: var(--c-cream);
   color: var(--c-cream);
   font-size: 1.4rem;
 }

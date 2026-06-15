@@ -16,8 +16,8 @@ body {
   font-family: var(--f-body);
   font-size: var(--t-body);
   line-height: 1.65;
-  color: var(--c-ink);
-  background: var(--c-cream);
+  color: var(--c-text);
+  background: var(--c-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -32,7 +32,23 @@ h4 {
   font-weight: 600;
   line-height: 1.06;
   letter-spacing: -0.01em;
-  color: var(--c-ink);
+  color: inherit;
+}
+
+/* metallic gold-foil text */
+.gold-foil {
+  background: var(--grad-gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+/* sparkle accent */
+.spark::before {
+  content: '✦';
+  color: var(--c-gold);
+  margin-right: 0.5em;
+  font-size: 0.7em;
+  vertical-align: 0.15em;
 }
 
 p {
@@ -99,7 +115,7 @@ button {
   font-weight: 500;
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: var(--c-gold-ink);
+  color: var(--c-gold-soft);
 }
 
 .gold-text {
@@ -151,23 +167,24 @@ button {
 }
 
 .btn--primary {
-  background: var(--c-wine);
-  color: var(--c-cream);
-  box-shadow: 0 10px 30px -12px rgba(122, 15, 28, 0.6);
+  background: var(--grad-gold);
+  color: var(--c-maroon-deep);
+  font-weight: 600;
+  box-shadow: 0 12px 34px -14px rgba(199, 163, 90, 0.7);
 }
 .btn--primary:hover {
-  background: var(--c-burgundy);
-  box-shadow: 0 16px 40px -14px rgba(75, 10, 25, 0.7);
+  filter: brightness(1.06);
+  box-shadow: 0 16px 44px -14px rgba(199, 163, 90, 0.85);
 }
 
 .btn--ghost {
   background: transparent;
-  color: var(--c-wine);
-  border: 1px solid var(--hairline);
+  color: var(--c-text);
+  border: 1px solid var(--hairline-gold);
 }
 .btn--ghost:hover {
-  border-color: var(--c-wine);
-  background: rgba(122, 15, 28, 0.04);
+  border-color: var(--c-gold);
+  background: rgba(245, 239, 232, 0.06);
 }
 
 .btn--gold {
