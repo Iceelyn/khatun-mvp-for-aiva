@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import Emblem from './Emblem'
 import ActionCard from './ActionCard'
+import InflationChart from './InflationChart'
 import useReducedMotion from '../hooks/useReducedMotion'
 import { parseReply, renderInline, getSuggestions } from '../lib/parseReply'
 
@@ -82,6 +83,8 @@ export default function Result({
         </header>
 
         <ActionCard reply={reply} answers={answers} />
+
+        <InflationChart />
 
         <article className="result__body">
           {nodes.map((n, i) => {
