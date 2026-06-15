@@ -177,6 +177,25 @@
   flex-wrap: wrap;
 }
 
+/* ---------- Returning visitor ---------- */
+.demo__returning {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: 560px;
+}
+.demo__returning-head {
+  font-size: var(--t-h2);
+  color: var(--c-wine);
+}
+.demo__returning-sub {
+  font-size: var(--t-lead);
+  color: #5c534c;
+  margin-bottom: 1rem;
+}
+
 /* ---------- Loading ---------- */
 .demo__loading {
   text-align: center;

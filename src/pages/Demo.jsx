@@ -4,18 +4,29 @@ import Progress from '../components/Progress'
 import Result from '../components/Result'
 import Emblem from '../components/Emblem'
 import { askKhatun, buildIntakeMessage } from '../lib/api'
+import { loadStore, updateStore, hasJourney, useKhatunStore } from '../lib/store'
+import { detectProduct, PRODUCTS } from '../lib/recommendation'
 
-const STAGE = { QUIZ: 'quiz', LOADING: 'loading', RESULT: 'result', ERROR: 'error' }
+const STAGE = {
+  RETURNING: 'returning',
+  QUIZ: 'quiz',
+  LOADING: 'loading',
+  RESULT: 'result',
+  ERROR: 'error',
+}
 
 export default function Demo({ onClose }) {
   const [step, setStep] = useState(0)
   const [answers, setAnswers] = useState({})
-  const [stage, setStage] = useState(STAGE.QUIZ)
+  const [stage, setStage] = useState(() =>
+    hasJourney() ? STAGE.RETURNING : STAGE.QUIZ
+  )
   const [reply, setReply] = useState('')
   const [messages, setMessages] = useState([])
   const [followUps, setFollowUps] = useState([])
   const [loadingFollowUp, setLoadingFollowUp] = useState(false)
   const dialogRef = useRef(null)
+  const store = useKhatunStore()
 
   const q = QUESTIONS[step]
   const selected = answers[q?.id]
@@ -58,10 +69,29 @@ export default function Demo({ onClose }) {
       const convo = [userMsg, { role: 'assistant', content: text }]
       setMessages(convo)
       setReply(text)
+      // Persist the journey so a returning visitor lands on her next step.
+      updateStore({ answers, reply: text, productKey: detectProduct(text) })
       setStage(STAGE.RESULT)
     } catch (err) {
       setStage(STAGE.ERROR)
     }
+  }
+
+  // Returning visitor — jump straight to her saved recommendation, no API call.
+  const resume = () => {
+    const s = loadStore()
+    const a = s.answers || {}
+    setAnswers(a)
+    setReply(s.reply || '')
+    setMessages(
+      s.reply
+        ? [
+            { role: 'user', content: buildIntakeMessage(a) },
+            { role: 'assistant', content: s.reply },
+          ]
+        : []
+    )
+    setStage(STAGE.RESULT)
   }
 
   const onFollowUp = async (question) => {
@@ -106,6 +136,31 @@ export default function Demo({ onClose }) {
       <button className="demo__close" onClick={onClose} aria-label="Хаах">
         ✕
       </button>
+
+      {stage === STAGE.RETURNING && (
+        <div className="demo__returning">
+          <Emblem size={84} />
+          <p className="eyebrow">Дахин тавтай морил</p>
+          <h2 className="demo__returning-head serif">
+            {store.profile?.name
+              ? `Тавтай морил, ${store.profile.name}!`
+              : 'Чи буцаж ирлээ!'}
+          </h2>
+          <p className="demo__returning-sub">
+            {store.productKey
+              ? `Сүүлд бид «${PRODUCTS[store.productKey]?.name}»-аар эхэлсэн. Дараагийн алхам руугаа үргэлжлүүлэх үү?`
+              : 'Үлдсэн алхамаа үргэлжлүүлэх үү?'}
+          </p>
+          <div className="demo__actions">
+            <button className="btn btn--primary" onClick={resume}>
+              Дараагийн алхам үзэх
+            </button>
+            <button className="btn btn--ghost" onClick={restart}>
+              Шинээр эхлэх
+            </button>
+          </div>
+        </div>
+      )}
 
       {stage === STAGE.QUIZ && (
         <div className="demo__quiz">
@@ -178,6 +233,7 @@ export default function Demo({ onClose }) {
       {stage === STAGE.RESULT && (
         <Result
           reply={reply}
+          answers={answers}
           onFollowUp={onFollowUp}
           followUps={followUps}
           loadingFollowUp={loadingFollowUp}
