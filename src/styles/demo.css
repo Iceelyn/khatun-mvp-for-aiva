@@ -541,6 +541,217 @@
   background: var(--c-rose);
 }
 
+/* --- journey (profile + roadmap + challenges + reminders) --- */
+.journey {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(199, 163, 90, 0.28);
+}
+.journey__title {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  color: var(--c-cream);
+}
+.journey__sub {
+  color: rgba(245, 237, 232, 0.78);
+  margin: 0.5rem 0 1.25rem;
+  max-width: none;
+}
+.journey__future {
+  font-size: var(--t-small);
+  color: var(--c-gold-soft);
+  margin-top: 0.5rem;
+}
+.journey__form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.journey__actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.25rem;
+}
+.journey__welcome {
+  margin-bottom: 1.5rem;
+}
+.journey__sub-title {
+  font-size: 1.15rem;
+  color: var(--c-gold-soft);
+  margin: 1.75rem 0 0.85rem;
+}
+
+/* roadmap timeline */
+.roadmap__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.roadmap__title {
+  font-size: 1.25rem;
+  color: var(--c-cream);
+}
+.roadmap__count {
+  font-family: var(--f-display);
+  color: var(--c-gold-soft);
+}
+.roadmap__list {
+  list-style: none;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.roadmap__item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+.roadmap__check {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r-pill);
+  border: 2px solid rgba(245, 237, 232, 0.4);
+  color: var(--c-cream);
+  font-size: 0.9rem;
+  display: grid;
+  place-items: center;
+  transition: all var(--d-fast) var(--ease);
+}
+.roadmap__item.is-done .roadmap__check {
+  background: var(--c-green);
+  border-color: var(--c-green);
+}
+.roadmap__item.is-next .roadmap__check {
+  border-color: var(--c-gold);
+  box-shadow: 0 0 0 4px rgba(199, 163, 90, 0.18);
+}
+.roadmap__day {
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(245, 237, 232, 0.55);
+}
+.roadmap__badge {
+  margin-left: 0.5rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-maroon-deep);
+  background: var(--c-gold-soft);
+  border-radius: var(--r-pill);
+  padding: 0.1rem 0.55rem;
+}
+.roadmap__step-title {
+  color: var(--c-cream);
+  font-weight: 500;
+  margin: 0.1rem 0;
+  max-width: none;
+}
+.roadmap__item.is-done .roadmap__step-title {
+  text-decoration: line-through;
+  color: rgba(245, 237, 232, 0.55);
+}
+.roadmap__hint {
+  font-size: var(--t-small);
+  color: rgba(245, 237, 232, 0.6);
+  max-width: none;
+}
+.roadmap__done-msg {
+  margin-top: 1.25rem;
+  color: var(--c-gold-soft);
+}
+
+/* challenges */
+.challenge {
+  background: rgba(245, 237, 232, 0.06);
+  border: 1px solid rgba(199, 163, 90, 0.25);
+  border-radius: var(--r-md);
+  padding: 1.1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+.challenge.is-done {
+  border-color: var(--c-green);
+}
+.challenge__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.75rem;
+}
+.challenge__name {
+  font-weight: 600;
+  color: var(--c-cream);
+}
+.challenge__count {
+  font-family: var(--f-display);
+  color: var(--c-gold-soft);
+}
+.challenge__dots {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.9rem;
+}
+.challenge__dot {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--r-pill);
+  background: rgba(245, 237, 232, 0.18);
+  transition: background var(--d-base) var(--ease);
+}
+.challenge__dot.is-on {
+  background: var(--c-gold);
+}
+.challenge__bar {
+  height: 10px;
+  border-radius: var(--r-pill);
+  background: rgba(245, 237, 232, 0.15);
+  overflow: hidden;
+  margin-bottom: 0.9rem;
+}
+.challenge__bar span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--c-gold), var(--c-gold-soft));
+  transition: width var(--d-base) var(--ease);
+}
+.challenge__form {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.challenge__form .result__input {
+  min-height: 46px;
+  flex: 1 1 140px;
+}
+.challenge__btn {
+  width: 100%;
+}
+.challenge__win {
+  color: var(--c-gold-soft);
+  font-weight: 500;
+}
+
+/* reminders */
+.reminders__btns {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.reminders__status {
+  margin-top: 0.75rem;
+  color: var(--c-gold-soft);
+  font-size: var(--t-small);
+}
+.reminders__future {
+  margin-top: 0.5rem;
+  font-size: var(--t-small);
+  color: rgba(245, 237, 232, 0.6);
+}
+
 /* --- body hierarchy --- */
 .result__body {
   display: flex;

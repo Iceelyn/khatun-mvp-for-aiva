@@ -3,6 +3,7 @@ import { gsap } from 'gsap'
 import Emblem from './Emblem'
 import ActionCard from './ActionCard'
 import InflationChart from './InflationChart'
+import Journey from './Journey'
 import useReducedMotion from '../hooks/useReducedMotion'
 import { parseReply, renderInline, getSuggestions } from '../lib/parseReply'
 
@@ -192,6 +193,8 @@ export default function Result({
             Эцсийн шийдвэр чинийх. 💛
           </p>
         </div>
+
+        <Journey reply={reply} />
 
         <p className="result__disclaimer-bar">
           🔒 Хувийн · 🤖 AI чиглүүлэг, лицензтэй санхүүгийн зөвлөгөө биш · тодорхой
