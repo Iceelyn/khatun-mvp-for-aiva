@@ -321,6 +321,127 @@
   color: var(--c-gold-soft);
 }
 
+/* --- first-step action card (cream panel on maroon) --- */
+.action-card {
+  background: var(--c-cream);
+  color: var(--c-maroon-deep);
+  border: 1px solid var(--c-gold);
+  border-radius: var(--r-lg);
+  padding: clamp(1.5rem, 4vw, 2.25rem);
+  margin-bottom: 2.5rem;
+  box-shadow: 0 30px 70px -40px rgba(0, 0, 0, 0.6);
+}
+.action-card--done {
+  border-color: var(--c-green);
+}
+.action-card__head {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.action-card__emoji {
+  font-size: 2.4rem;
+  line-height: 1;
+}
+.action-card__eyebrow {
+  font-family: var(--f-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--c-gold-ink);
+}
+.action-card__product {
+  font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+  color: var(--c-wine);
+  line-height: 1.1;
+}
+.action-card__amount {
+  background: rgba(122, 15, 28, 0.05);
+  border-radius: var(--r-md);
+  padding: 0.85rem 1.1rem;
+  margin-bottom: 1.25rem;
+}
+.action-card__amount-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-gold-ink);
+  margin-bottom: 0.25rem;
+}
+.action-card__amount p {
+  color: var(--c-maroon-deep);
+  max-width: none;
+}
+.action-card__steps {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+.action-card__steps li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  font-size: 1.02rem;
+  line-height: 1.5;
+}
+.action-card__num {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-pill);
+  background: var(--c-wine);
+  color: var(--c-cream);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.action-card__foot {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.action-card__done {
+  min-height: 46px;
+}
+.action-card--done .action-card__done {
+  color: var(--c-green);
+  border-color: var(--c-green);
+}
+.action-card__why-toggle {
+  font-family: var(--f-body);
+  font-size: 0.92rem;
+  color: var(--c-wine);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.action-card__why {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--hairline);
+  color: #5c534c;
+  font-size: 0.98rem;
+  max-width: none;
+}
+
+.result__disclaimer-bar {
+  margin-top: 2rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid rgba(199, 163, 90, 0.3);
+  border-radius: var(--r-md);
+  font-size: var(--t-small);
+  line-height: 1.6;
+  color: rgba(245, 237, 232, 0.7);
+  max-width: none;
+}
+
 /* --- body hierarchy --- */
 .result__body {
   display: flex;

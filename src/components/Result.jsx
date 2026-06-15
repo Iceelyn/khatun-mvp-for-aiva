@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import Emblem from './Emblem'
+import ActionCard from './ActionCard'
 import useReducedMotion from '../hooks/useReducedMotion'
 import { parseReply, renderInline, getSuggestions } from '../lib/parseReply'
 
@@ -10,6 +11,7 @@ const GoldDust = lazy(() => import('./GoldDust'))
 // Immersive, full-screen recommendation display (deep maroon + cream).
 export default function Result({
   reply,
+  answers = {},
   onFollowUp,
   followUps,
   loadingFollowUp,
@@ -78,6 +80,8 @@ export default function Result({
           <Emblem size={112} className="result__logo" />
           <p className="eyebrow result__eyebrow">Хатуны зөвлөмж</p>
         </header>
+
+        <ActionCard reply={reply} answers={answers} />
 
         <article className="result__body">
           {nodes.map((n, i) => {
@@ -185,6 +189,11 @@ export default function Result({
             Эцсийн шийдвэр чинийх. 💛
           </p>
         </div>
+
+        <p className="result__disclaimer-bar">
+          🔒 Хувийн · 🤖 AI чиглүүлэг, лицензтэй санхүүгийн зөвлөгөө биш · тодорхой
+          хүү, үнэ, доод хязгаарыг хэзээ ч зохиодоггүй — банк/брокерээсээ шалга.
+        </p>
 
         <div className="result__actions">
           <button className="btn btn--ghost result__btn-ghost" onClick={onRestart}>
