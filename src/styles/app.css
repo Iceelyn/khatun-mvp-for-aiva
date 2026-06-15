@@ -49,6 +49,38 @@
   padding: 0.6rem 1.5rem;
   font-size: 0.95rem;
 }
+.nav__right {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+/* language toggle */
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  font-family: var(--f-body);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+.lang-toggle__btn {
+  min-height: 36px;
+  padding: 0.3rem 0.5rem;
+  color: var(--c-mauve);
+  font-weight: 600;
+  border-radius: var(--r-sm);
+  transition: color var(--d-fast) var(--ease);
+}
+.lang-toggle__btn.is-active {
+  color: var(--c-gold);
+}
+.lang-toggle__btn:hover {
+  color: var(--c-gold);
+}
+.lang-toggle__sep {
+  color: var(--hairline-gold);
+}
 
 @media (max-width: 480px) {
   .nav__wordmark {
