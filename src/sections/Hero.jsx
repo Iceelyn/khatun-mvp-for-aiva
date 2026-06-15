@@ -3,6 +3,7 @@ import { gsap } from 'gsap'
 import Emblem from '../components/Emblem'
 import Wordmark from '../components/Wordmark'
 import useReducedMotion from '../hooks/useReducedMotion'
+import { useT } from '../i18n/index.jsx'
 
 // Three.js gold-dust canvas is lazy-loaded so it never blocks first paint.
 const GoldDust = lazy(() => import('../components/GoldDust'))
@@ -10,6 +11,7 @@ const GoldDust = lazy(() => import('../components/GoldDust'))
 export default function Hero({ onStart }) {
   const root = useRef(null)
   const reduced = useReducedMotion()
+  const { t } = useT()
 
   useEffect(() => {
     if (reduced) return
@@ -42,33 +44,30 @@ export default function Hero({ onStart }) {
         <Emblem size={92} className="hero__emblem" />
         <Wordmark className="hero__wordmark" as="h1" />
 
-        <p className="eyebrow hero__eyebrow">Санхүүгийн дараагийн алхам</p>
+        <p className="eyebrow hero__eyebrow">{t('hero.eyebrow')}</p>
 
         <h2 className="hero__headline">
           <span className="hero__line-wrap">
-            <span className="hero__line">Чи хаана ч байсан,</span>
+            <span className="hero__line">{t('hero.line1')}</span>
           </span>
           <span className="hero__line-wrap">
             <span className="hero__line hero__line--accent">
-              дараагийн алхамаа хийе.
+              {t('hero.line2')}
             </span>
           </span>
         </h2>
 
-        <p className="hero__sub" lang="en">
-          Wherever you are in your money journey, Khatun walks the next step with
-          you — privately, in Mongolian.
-        </p>
+        <p className="hero__sub">{t('hero.sub')}</p>
 
         <div className="hero__cta">
           <button className="btn btn--primary" onClick={onStart}>
-            Туршиж үзэх
+            {t('hero.cta')}
           </button>
         </div>
       </div>
 
       <div className="hero__scroll" aria-hidden="true">
-        <span>доош гүйлгэ</span>
+        <span>{t('hero.scroll')}</span>
         <span className="hero__scroll-line" />
       </div>
     </section>

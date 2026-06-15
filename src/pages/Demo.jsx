@@ -5,7 +5,8 @@ import Result from '../components/Result'
 import Emblem from '../components/Emblem'
 import { askKhatun, buildIntakeMessage } from '../lib/api'
 import { loadStore, updateStore, hasJourney, useKhatunStore } from '../lib/store'
-import { detectProduct, PRODUCTS } from '../lib/recommendation'
+import { detectProduct } from '../lib/recommendation'
+import { useT, format } from '../i18n/index.jsx'
 
 const STAGE = {
   RETURNING: 'returning',
@@ -27,11 +28,11 @@ export default function Demo({ onClose }) {
   const [loadingFollowUp, setLoadingFollowUp] = useState(false)
   const dialogRef = useRef(null)
   const store = useKhatunStore()
+  const { t, lang } = useT()
 
   const q = QUESTIONS[step]
   const selected = answers[q?.id]
 
-  // Lock body scroll + close on Escape.
   useEffect(() => {
     const prev = document.body.style.overflow
     document.body.style.overflow = 'hidden'
@@ -44,8 +45,7 @@ export default function Demo({ onClose }) {
     }
   }, [onClose])
 
-  const select = (value) =>
-    setAnswers((a) => ({ ...a, [q.id]: value }))
+  const select = (value) => setAnswers((a) => ({ ...a, [q.id]: value }))
 
   const next = async () => {
     if (!selected) return
@@ -58,18 +58,12 @@ export default function Demo({ onClose }) {
 
   const runRecommendation = async () => {
     setStage(STAGE.LOADING)
-    const intake = buildIntakeMessage({
-      leftover: answers.leftover,
-      goal: answers.goal,
-      risk: answers.risk,
-    })
+    const intake = buildIntakeMessage(answers, t)
     const userMsg = { role: 'user', content: intake }
     try {
-      const text = await askKhatun([userMsg])
-      const convo = [userMsg, { role: 'assistant', content: text }]
-      setMessages(convo)
+      const text = await askKhatun([userMsg], lang)
+      setMessages([userMsg, { role: 'assistant', content: text }])
       setReply(text)
-      // Persist the journey so a returning visitor lands on her next step.
       updateStore({ answers, reply: text, productKey: detectProduct(text) })
       setStage(STAGE.RESULT)
     } catch (err) {
@@ -86,7 +80,7 @@ export default function Demo({ onClose }) {
     setMessages(
       s.reply
         ? [
-            { role: 'user', content: buildIntakeMessage(a) },
+            { role: 'user', content: buildIntakeMessage(a, t) },
             { role: 'assistant', content: s.reply },
           ]
         : []
@@ -99,17 +93,11 @@ export default function Demo({ onClose }) {
     const userMsg = { role: 'user', content: question }
     const convo = [...messages, userMsg]
     try {
-      const text = await askKhatun(convo)
+      const text = await askKhatun(convo, lang)
       setMessages([...convo, { role: 'assistant', content: text }])
       setFollowUps((f) => [...f, { question, answer: text }])
     } catch (err) {
-      setFollowUps((f) => [
-        ...f,
-        {
-          question,
-          answer: 'Уучлаарай, түр алдаа гарлаа. Дахин оролдоод үзээрэй. 🙏',
-        },
-      ])
+      setFollowUps((f) => [...f, { question, answer: t('result.followError') }])
     } finally {
       setLoadingFollowUp(false)
     }
@@ -129,34 +117,36 @@ export default function Demo({ onClose }) {
       className={`demo ${stage === STAGE.RESULT ? 'demo--result' : ''}`}
       role="dialog"
       aria-modal="true"
-      aria-label="Хатуны асуулга"
+      aria-label={t('demo.ariaDialog')}
       ref={dialogRef}
       tabIndex={-1}
     >
-      <button className="demo__close" onClick={onClose} aria-label="Хаах">
+      <button className="demo__close" onClick={onClose} aria-label={t('demo.close')}>
         ✕
       </button>
 
       {stage === STAGE.RETURNING && (
         <div className="demo__returning">
           <Emblem size={84} />
-          <p className="eyebrow">Дахин тавтай морил</p>
+          <p className="eyebrow">{t('demo.returningEyebrow')}</p>
           <h2 className="demo__returning-head serif">
             {store.profile?.name
-              ? `Тавтай морил, ${store.profile.name}!`
-              : 'Чи буцаж ирлээ!'}
+              ? format(t('demo.welcomeNamed'), { name: store.profile.name })
+              : t('demo.welcomeAnon')}
           </h2>
           <p className="demo__returning-sub">
             {store.productKey
-              ? `Сүүлд бид «${PRODUCTS[store.productKey]?.name}»-аар эхэлсэн. Дараагийн алхам руугаа үргэлжлүүлэх үү?`
-              : 'Үлдсэн алхамаа үргэлжлүүлэх үү?'}
+              ? format(t('demo.resumeSubProduct'), {
+                  product: t(`products.${store.productKey}.name`),
+                })
+              : t('demo.resumeSubAnon')}
           </p>
           <div className="demo__actions">
             <button className="btn btn--primary" onClick={resume}>
-              Дараагийн алхам үзэх
+              {t('demo.resume')}
             </button>
             <button className="btn btn--ghost" onClick={restart}>
-              Шинээр эхлэх
+              {t('demo.restart')}
             </button>
           </div>
         </div>
@@ -168,48 +158,47 @@ export default function Demo({ onClose }) {
 
           <div className="demo__body" key={q.id}>
             <p className="eyebrow demo__step-label">
-              Алхам {step + 1} / {QUESTIONS.length} · {q.label}
+              {format(t('demo.stepLabel'), {
+                n: step + 1,
+                total: QUESTIONS.length,
+                label: t(`q.label.${q.id}`),
+              })}
             </p>
-            <h2 className="demo__question">{q.title}</h2>
+            <h2 className="demo__question">{t(`q.${q.id}.title`)}</h2>
 
             <div
               className={`options options--${q.layout}`}
               role="radiogroup"
-              aria-label={q.title}
+              aria-label={t(`q.${q.id}.title`)}
             >
               {q.options.map((opt) => (
                 <button
-                  key={opt.value}
+                  key={opt.key}
                   className={`option option--${q.layout} ${
-                    selected === opt.value ? 'option--selected' : ''
+                    selected === opt.key ? 'option--selected' : ''
                   }`}
                   role="radio"
-                  aria-checked={selected === opt.value}
-                  onClick={() => select(opt.value)}
+                  aria-checked={selected === opt.key}
+                  onClick={() => select(opt.key)}
                 >
                   <span className="option__emoji" aria-hidden="true">
                     {opt.emoji}
                   </span>
-                  <span className="option__label">{opt.label}</span>
+                  <span className="option__label">
+                    {t(`q.${q.id}.opt.${opt.key}`)}
+                  </span>
                 </button>
               ))}
             </div>
 
             <div className="demo__actions">
               {step > 0 && (
-                <button
-                  className="btn btn--ghost"
-                  onClick={() => setStep((s) => s - 1)}
-                >
-                  Буцах
+                <button className="btn btn--ghost" onClick={() => setStep((s) => s - 1)}>
+                  {t('demo.back')}
                 </button>
               )}
-              <button
-                className="btn btn--primary"
-                onClick={next}
-                disabled={!selected}
-              >
-                {q.cta}
+              <button className="btn btn--primary" onClick={next} disabled={!selected}>
+                {t(`q.cta.${q.cta}`)}
               </button>
             </div>
           </div>
@@ -219,9 +208,7 @@ export default function Demo({ onClose }) {
       {stage === STAGE.LOADING && (
         <div className="demo__loading">
           <Emblem size={72} className="demo__loading-emblem" />
-          <p className="demo__loading-text serif">
-            Хатун чамд тохирох алхамыг бодож байна…
-          </p>
+          <p className="demo__loading-text serif">{t('demo.loading')}</p>
           <span className="demo__loading-dots" aria-hidden="true">
             <i />
             <i />
@@ -245,15 +232,11 @@ export default function Demo({ onClose }) {
       {stage === STAGE.ERROR && (
         <div className="demo__loading">
           <Emblem size={64} />
-          <p className="demo__loading-text serif">
-            Өө, түр холболтын алдаа гарлаа.
-          </p>
-          <p className="demo__error-sub">
-            Дахин оролдоод үзье — Хатун чамайг хүлээж байна. 💛
-          </p>
+          <p className="demo__loading-text serif">{t('demo.errorTitle')}</p>
+          <p className="demo__error-sub">{t('demo.errorSub')}</p>
           <div className="demo__actions">
             <button className="btn btn--primary" onClick={runRecommendation}>
-              Дахин оролдох
+              {t('demo.retry')}
             </button>
           </div>
         </div>

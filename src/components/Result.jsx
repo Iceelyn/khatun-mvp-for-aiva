@@ -5,7 +5,9 @@ import ActionCard from './ActionCard'
 import InflationChart from './InflationChart'
 import Journey from './Journey'
 import useReducedMotion from '../hooks/useReducedMotion'
-import { parseReply, renderInline, getSuggestions } from '../lib/parseReply'
+import { parseReply, renderInline } from '../lib/parseReply'
+import { getSuggestions } from '../lib/recommendation'
+import { useT } from '../i18n/index.jsx'
 
 // Lazy gold-dust background so three.js never blocks the result render.
 const GoldDust = lazy(() => import('./GoldDust'))
@@ -24,9 +26,10 @@ export default function Result({
   const [usedChips, setUsedChips] = useState([])
   const scope = useRef(null)
   const reduced = useReducedMotion()
+  const { t, lang } = useT()
 
   const nodes = useMemo(() => parseReply(reply), [reply])
-  const suggestions = useMemo(() => getSuggestions(reply), [reply])
+  const suggestions = useMemo(() => getSuggestions(reply, t), [reply, lang, t])
   const chips = suggestions.filter((s) => !usedChips.includes(s))
 
   // GSAP entrance choreography.
@@ -80,7 +83,7 @@ export default function Result({
       <div className="result__inner">
         <header className="result__top">
           <Emblem size={112} className="result__logo" />
-          <p className="eyebrow result__eyebrow">Хатуны зөвлөмж</p>
+          <p className="eyebrow result__eyebrow">{t('result.eyebrow')}</p>
         </header>
 
         <ActionCard reply={reply} answers={answers} />
@@ -143,13 +146,11 @@ export default function Result({
           </div>
         )}
 
-        {loadingFollowUp && (
-          <p className="result__typing">Хатун бичиж байна…</p>
-        )}
+        {loadingFollowUp && <p className="result__typing">{t('result.typing')}</p>}
 
         <div className="result__ask">
           {chips.length > 0 && (
-            <div className="result__chips" role="list" aria-label="Санал болгож буй асуултууд">
+            <div className="result__chips" role="list" aria-label={t('result.suggestionsAria')}>
               {chips.map((c) => (
                 <button
                   key={c}
@@ -167,13 +168,13 @@ export default function Result({
 
           <form className="result__form" onSubmit={submit}>
             <label className="sr-only" htmlFor="followup">
-              Хатунаас нэмж асуух
+              {t('result.askAria')}
             </label>
             <input
               id="followup"
               type="text"
               className="result__input"
-              placeholder="Нэмж асуух зүйл байна уу?"
+              placeholder={t('result.askPlaceholder')}
               value={text}
               onChange={(e) => setText(e.target.value)}
               maxLength={300}
@@ -184,29 +185,21 @@ export default function Result({
               type="submit"
               disabled={!text.trim() || loadingFollowUp}
             >
-              Илгээх
+              {t('result.send')}
             </button>
           </form>
-
-          <p className="result__note">
-            Энэ бол найрсаг чиглүүлэг — лицензтэй санхүүгийн зөвлөгөө биш.
-            Эцсийн шийдвэр чинийх. 💛
-          </p>
         </div>
 
         <Journey reply={reply} />
 
-        <p className="result__disclaimer-bar">
-          🔒 Хувийн · 🤖 AI чиглүүлэг, лицензтэй санхүүгийн зөвлөгөө биш · тодорхой
-          хүү, үнэ, доод хязгаарыг хэзээ ч зохиодоггүй — банк/брокерээсээ шалга.
-        </p>
+        <p className="result__disclaimer-bar">{t('result.disclaimerBar')}</p>
 
         <div className="result__actions">
           <button className="btn btn--ghost result__btn-ghost" onClick={onRestart}>
-            Дахин эхлэх
+            {t('result.restart')}
           </button>
           <button className="btn btn--gold" onClick={onClose}>
-            Дуусгах
+            {t('result.finish')}
           </button>
         </div>
       </div>

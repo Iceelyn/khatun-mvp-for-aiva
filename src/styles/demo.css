@@ -6,7 +6,10 @@
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: var(--c-cream);
+  background:
+    radial-gradient(120% 80% at 50% -10%, rgba(199, 163, 90, 0.14), transparent 60%),
+    linear-gradient(165deg, #2c0712 0%, #4b0a19 55%, #29060f 100%);
+  color: var(--c-text);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -34,14 +37,14 @@
   height: 46px;
   border-radius: var(--r-pill);
   font-size: 1.1rem;
-  color: var(--c-wine);
-  border: 1px solid var(--hairline);
-  background: var(--c-white);
+  color: var(--c-cream);
+  border: 1px solid rgba(245, 237, 232, 0.28);
+  background: rgba(245, 237, 232, 0.08);
   transition: background var(--d-fast) var(--ease),
     transform var(--d-fast) var(--ease);
 }
 .demo__close:hover {
-  background: var(--c-blush);
+  background: rgba(245, 237, 232, 0.18);
   transform: rotate(90deg);
 }
 
@@ -188,11 +191,11 @@
 }
 .demo__returning-head {
   font-size: var(--t-h2);
-  color: var(--c-wine);
+  color: var(--c-gold-soft);
 }
 .demo__returning-sub {
   font-size: var(--t-lead);
-  color: #5c534c;
+  color: var(--c-muted);
   margin-bottom: 1rem;
 }
 
@@ -224,7 +227,7 @@
   color: var(--c-wine);
 }
 .demo__error-sub {
-  color: #5c534c;
+  color: var(--c-muted);
 }
 .demo__loading-dots {
   display: inline-flex;

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useKhatunStore, updateStore } from '../lib/store'
+import { useT } from '../i18n/index.jsx'
 
 const STREAK_GOAL = 7
 const todayKey = () => new Date().toISOString().slice(0, 10)
@@ -7,6 +8,7 @@ const todayKey = () => new Date().toISOString().slice(0, 10)
 // Joyful micro-challenges — progress only, no real money movement.
 export default function Challenges() {
   const store = useKhatunStore()
+  const { t } = useT()
   const ch = store.challenges || {}
   const days = ch.streakDays || []
   const monthly = ch.monthly || { target: 0, saved: 0 }
@@ -50,12 +52,12 @@ export default function Challenges() {
 
   return (
     <div className="challenges">
-      <h3 className="journey__sub-title">Сорилтууд</h3>
+      <h3 className="journey__sub-title">{t('challenges.title')}</h3>
 
       {/* 7-day streak */}
       <div className={`challenge ${streakDone ? 'is-done' : ''}`}>
         <div className="challenge__head">
-          <span className="challenge__name">7 хоногийн анхны алхам</span>
+          <span className="challenge__name">{t('challenges.streakName')}</span>
           <span className="challenge__count">
             {streak}/{STREAK_GOAL}
           </span>
@@ -66,10 +68,10 @@ export default function Challenges() {
           ))}
         </div>
         {streakDone ? (
-          <p className="challenge__win">🎉 Бүтэн 7 хоног! Тууштай байдал чинь гайхалтай.</p>
+          <p className="challenge__win">{t('challenges.streakWin')}</p>
         ) : (
           <button className="btn btn--gold challenge__btn" onClick={logDay} disabled={taggedToday}>
-            {taggedToday ? '✓ Өнөөдөр тэмдэглэгдсэн' : 'Өнөөдрийн алхмаа тэмдэглэх'}
+            {taggedToday ? t('challenges.streakTagged') : t('challenges.streakBtn')}
           </button>
         )}
       </div>
@@ -77,7 +79,7 @@ export default function Challenges() {
       {/* monthly save challenge */}
       <div className={`challenge ${monthlyDone ? 'is-done' : ''}`}>
         <div className="challenge__head">
-          <span className="challenge__name">Энэ сард хуримтлуул</span>
+          <span className="challenge__name">{t('challenges.monthlyName')}</span>
           {monthly.target > 0 && (
             <span className="challenge__count">
               {(monthly.saved || 0).toLocaleString()} / {monthly.target.toLocaleString()}₮
@@ -91,19 +93,19 @@ export default function Challenges() {
               <span style={{ width: `${savedPct}%` }} />
             </div>
             {monthlyDone ? (
-              <p className="challenge__win">🎉 Зорилгодоо хүрлээ! Дараагийн сард ахиулъя.</p>
+              <p className="challenge__win">{t('challenges.monthlyWin')}</p>
             ) : (
               <form className="challenge__form" onSubmit={logSaved}>
                 <input
                   className="result__input"
                   type="number"
                   inputMode="numeric"
-                  placeholder="Хуримтлуулсан дүн (₮)"
+                  placeholder={t('challenges.monthlyAddPh')}
                   value={add}
                   onChange={(e) => setAdd(e.target.value)}
                 />
                 <button className="btn btn--gold" type="submit">
-                  Нэмэх
+                  {t('challenges.monthlyAdd')}
                 </button>
               </form>
             )}
@@ -114,12 +116,12 @@ export default function Challenges() {
               className="result__input"
               type="number"
               inputMode="numeric"
-              placeholder="Зорилго (₮)"
+              placeholder={t('challenges.monthlyTargetPh')}
               value={target}
               onChange={(e) => setTarget(e.target.value)}
             />
             <button className="btn btn--gold" type="submit">
-              Зорилго тавих
+              {t('challenges.monthlySet')}
             </button>
           </form>
         )}

@@ -1,11 +1,13 @@
 import { useKhatunStore, updateStore } from '../lib/store'
 import { buildRoadmap, detectProduct } from '../lib/recommendation'
+import { useT, format } from '../i18n/index.jsx'
 
 // Visual 30-day timeline. Always surfaces her NEXT step. Progress persists.
 export default function Roadmap({ reply }) {
   const store = useKhatunStore()
+  const { t } = useT()
   const key = store.productKey || detectProduct(reply || '')
-  const steps = buildRoadmap(key)
+  const steps = buildRoadmap(key, t)
   const done = store.roadmap?.done || []
 
   const toggle = (i) => {
@@ -20,7 +22,7 @@ export default function Roadmap({ reply }) {
   return (
     <div className="roadmap">
       <div className="roadmap__head">
-        <h3 className="roadmap__title">Таны 30 хоногийн зам</h3>
+        <h3 className="roadmap__title">{t('roadmap.title')}</h3>
         <span className="roadmap__count">
           {completed}/{steps.length}
         </span>
@@ -41,13 +43,15 @@ export default function Roadmap({ reply }) {
                 className="roadmap__check"
                 onClick={() => toggle(i)}
                 aria-pressed={isDone}
-                aria-label={isDone ? 'Дуусгасан' : 'Дуусгасан гэж тэмдэглэх'}
+                aria-label={t('roadmap.checkAria')}
               >
                 {isDone ? '✓' : ''}
               </button>
               <div className="roadmap__body">
-                <span className="roadmap__day">{s.day} дэх өдөр</span>
-                {isNext && <span className="roadmap__badge">Дараагийн алхам</span>}
+                <span className="roadmap__day">
+                  {format(t('roadmap.day'), { day: s.day })}
+                </span>
+                {isNext && <span className="roadmap__badge">{t('roadmap.next')}</span>}
                 <p className="roadmap__step-title">{s.title}</p>
                 <p className="roadmap__hint">{s.hint}</p>
               </div>
@@ -56,11 +60,7 @@ export default function Roadmap({ reply }) {
         })}
       </ol>
 
-      {nextIndex === -1 && (
-        <p className="roadmap__done-msg">
-          🎉 Бүх алхмаа дуусгалаа! Чи хаана ч байсан — дараагийн зорилго тавих цаг.
-        </p>
-      )}
+      {nextIndex === -1 && <p className="roadmap__done-msg">{t('roadmap.doneMsg')}</p>}
     </div>
   )
 }
