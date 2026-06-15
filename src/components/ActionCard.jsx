@@ -1,22 +1,27 @@
 import { useState } from 'react'
 import { useKhatunStore, updateStore } from '../lib/store'
 import {
-  PRODUCTS,
   detectProduct,
+  productName,
+  productSteps,
   getAmountRange,
   getWhy,
 } from '../lib/recommendation'
+import { useT } from '../i18n/index.jsx'
+
+const EMOJI = { deposit: '🏦', bond: '📜', ett: '💎', mse: '📈' }
 
 // Polished, structured "first step" card: product, comfortable amount range,
-// the exact 3 steps, a "Хийсэн" button, and a "Яагаад энэ вэ?" toggle.
+// the exact 3 steps, a "Done" button, and a "Why this?" toggle.
 export default function ActionCard({ reply, answers = {} }) {
   const store = useKhatunStore()
+  const { t } = useT()
   const [showWhy, setShowWhy] = useState(false)
 
   const key = store.productKey || detectProduct(reply)
-  const product = PRODUCTS[key] || PRODUCTS.deposit
-  const amount = getAmountRange(answers.leftover)
-  const why = getWhy(answers)
+  const steps = productSteps(key, t)
+  const amount = getAmountRange(answers.leftover, t)
+  const why = getWhy(answers, t)
 
   const done = (store.roadmap?.done || []).includes(0)
   const markDone = () => {
@@ -30,21 +35,21 @@ export default function ActionCard({ reply, answers = {} }) {
     <div className={`action-card ${done ? 'action-card--done' : ''}`}>
       <div className="action-card__head">
         <span className="action-card__emoji" aria-hidden="true">
-          {product.emoji}
+          {EMOJI[key]}
         </span>
         <div>
-          <p className="action-card__eyebrow">Чиний эхний алхам</p>
-          <h2 className="action-card__product">{product.name}</h2>
+          <p className="action-card__eyebrow">{t('actionCard.eyebrow')}</p>
+          <h2 className="action-card__product">{productName(key, t)}</h2>
         </div>
       </div>
 
       <div className="action-card__amount">
-        <span className="action-card__amount-label">Тав тухтай эхлэх хэмжээ</span>
+        <span className="action-card__amount-label">{t('actionCard.amountLabel')}</span>
         <p>{amount}</p>
       </div>
 
       <ol className="action-card__steps">
-        {product.steps.map((s, i) => (
+        {steps.map((s, i) => (
           <li key={i}>
             <span className="action-card__num">{i + 1}</span>
             {s}
@@ -58,14 +63,14 @@ export default function ActionCard({ reply, answers = {} }) {
           onClick={markDone}
           disabled={done}
         >
-          {done ? '✓ Хийсэн' : 'Хийсэн'}
+          {done ? t('actionCard.doneState') : t('actionCard.done')}
         </button>
         <button
           className="action-card__why-toggle"
           onClick={() => setShowWhy((v) => !v)}
           aria-expanded={showWhy}
         >
-          Яагаад энэ вэ? {showWhy ? '▴' : '▾'}
+          {t('actionCard.why')} {showWhy ? '▴' : '▾'}
         </button>
       </div>
 

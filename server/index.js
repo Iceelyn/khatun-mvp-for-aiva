@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
-import { SYSTEM_PROMPT } from './prompt.js'
+import { buildSystemPrompt } from './prompt.js'
 
 const app = express()
 const PORT = process.env.PORT || 8787
@@ -24,10 +24,11 @@ app.post('/api/chat', async (req, res) => {
       .json({ error: 'ANTHROPIC_API_KEY тохируулагдаагүй байна.' })
   }
 
-  const { messages } = req.body || {}
+  const { messages, lang } = req.body || {}
   if (!Array.isArray(messages) || messages.length === 0) {
     return res.status(400).json({ error: 'messages шаардлагатай.' })
   }
+  const systemPrompt = buildSystemPrompt(lang === 'en' ? 'en' : 'mn')
 
   // Sanitize to the shape the API expects.
   const clean = messages
@@ -44,7 +45,7 @@ app.post('/api/chat', async (req, res) => {
       },
       body: JSON.stringify({
         model: MODEL,
-        system: SYSTEM_PROMPT,
+        system: systemPrompt,
         messages: clean,
         max_tokens: 1000,
         temperature: 0.3,

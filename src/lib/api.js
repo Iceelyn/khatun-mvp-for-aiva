@@ -1,9 +1,9 @@
 // Thin client for the Express /api/chat route. The browser NEVER sees the key.
-export async function askKhatun(messages) {
+export async function askKhatun(messages, lang = 'mn') {
   const res = await fetch('/api/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages }),
+    body: JSON.stringify({ messages, lang }),
   })
 
   if (!res.ok) {
@@ -23,7 +23,13 @@ export async function askKhatun(messages) {
   return data.reply
 }
 
-// Build the single structured message sent after Q3.
-export function buildIntakeMessage({ leftover, goal, risk }) {
-  return `Үлдэгдэл: ${leftover}; Зорилго: ${goal}; Эрсдэл: ${risk}`
+// Build the single structured intake message after Q3, in the active language.
+// `answers` holds option keys; `t` localizes them.
+export function buildIntakeMessage(answers = {}, t) {
+  const get = (q, k) => (k ? t(`q.${q}.opt.${k}`) : '—')
+  return [
+    `${t('intake.leftover')}: ${get('leftover', answers.leftover)}`,
+    `${t('intake.goal')}: ${get('goal', answers.goal)}`,
+    `${t('intake.risk')}: ${get('risk', answers.risk)}`,
+  ].join('; ')
 }
