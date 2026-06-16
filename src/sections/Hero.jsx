@@ -1,6 +1,6 @@
 import { Suspense, lazy, useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
-import Emblem from '../components/Emblem'
+import CrownHero from '../components/CrownHero'
 import Wordmark from '../components/Wordmark'
 import useReducedMotion from '../hooks/useReducedMotion'
 import { useT } from '../i18n/index.jsx'
@@ -17,7 +17,7 @@ export default function Hero({ onStart }) {
     if (reduced) return
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
-      tl.from('.hero__emblem', { opacity: 0, scale: 0.8, duration: 1.2 })
+      tl.from('.crown', { opacity: 0, scale: 0.8, y: -10, duration: 1.2 })
         .from('.hero__wordmark', { opacity: 0, y: 24, duration: 0.9 }, '-=0.7')
         .from('.hero__eyebrow', { opacity: 0, y: 16, duration: 0.7 }, '-=0.5')
         .from(
@@ -41,7 +41,7 @@ export default function Hero({ onStart }) {
       )}
 
       <div className="container hero__inner">
-        <Emblem size={92} className="hero__emblem" />
+        <CrownHero />
         <Wordmark className="hero__wordmark" as="h1" />
 
         <p className="eyebrow hero__eyebrow">{t('hero.eyebrow')}</p>
