@@ -29,6 +29,7 @@ export default function Demo({ onClose, initialStage }) {
   const [messages, setMessages] = useState([])
   const [followUps, setFollowUps] = useState([])
   const [loadingFollowUp, setLoadingFollowUp] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
   const dialogRef = useRef(null)
   const store = useKhatunStore()
   const { t, lang } = useT()
@@ -93,6 +94,7 @@ export default function Demo({ onClose, initialStage }) {
       updateStore({ answers, reply: text, productKey: detectProduct(text) })
       setStage(STAGE.RESULT)
     } catch (err) {
+      setErrorMsg(err?.message || '')
       setStage(STAGE.ERROR)
     }
   }
@@ -270,6 +272,7 @@ export default function Demo({ onClose, initialStage }) {
           <Emblem size={64} />
           <p className="demo__loading-text serif">{t('demo.errorTitle')}</p>
           <p className="demo__error-sub">{t('demo.errorSub')}</p>
+          {errorMsg && <p className="demo__error-detail">{errorMsg}</p>}
           <div className="demo__actions">
             <button className="btn btn--primary" onClick={runRecommendation}>
               {t('demo.retry')}

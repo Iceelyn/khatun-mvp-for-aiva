@@ -229,6 +229,16 @@
 .demo__error-sub {
   color: var(--c-muted);
 }
+.demo__error-detail {
+  margin-top: 0.25rem;
+  padding: 0.6rem 1rem;
+  font-size: var(--t-small);
+  color: var(--c-gold-soft);
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(199, 163, 90, 0.3);
+  border-radius: var(--r-sm);
+  max-width: 36ch;
+}
 .demo__loading-dots {
   display: inline-flex;
   gap: 0.4rem;
