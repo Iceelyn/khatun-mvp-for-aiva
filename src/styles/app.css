@@ -69,7 +69,8 @@
   letter-spacing: 0.05em;
 }
 .lang-toggle__btn {
-  min-height: 36px;
+  min-height: 44px;
+  min-width: 44px;
   padding: 0.3rem 0.5rem;
   color: var(--c-mauve);
   font-weight: 600;

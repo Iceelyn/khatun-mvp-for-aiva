@@ -30,7 +30,8 @@ export default function CrownHero() {
     const onScroll = () => {
       cancelAnimationFrame(raf)
       raf = requestAnimationFrame(() => {
-        el.style.setProperty('--parY', `${Math.min(window.scrollY * 0.12, 80)}px`)
+        // Drift gently UPWARD (away from the wordmark) so it never overlaps text.
+        el.style.setProperty('--parY', `${-Math.min(window.scrollY * 0.1, 48)}px`)
       })
     }
     window.addEventListener('scroll', onScroll, { passive: true })
