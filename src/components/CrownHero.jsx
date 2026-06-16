@@ -43,7 +43,6 @@ export default function CrownHero() {
 
   // Use the 3D model only on capable, motion-OK, larger viewports.
   const use3D = Boolean(glbUrl) && !reduced && !isSmall
-  const hasAsset = Boolean(glbUrl || pngUrl)
 
   return (
     <div className="crown" ref={wrapRef}>
@@ -68,7 +67,6 @@ export default function CrownHero() {
         )}
         <span className="crown__shimmer" aria-hidden="true" />
       </div>
-      {!hasAsset && <span className="crown__temp">placeholder</span>}
     </div>
   )
 }

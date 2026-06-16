@@ -21,8 +21,8 @@ function detectInitial() {
   } catch {
     /* ignore */
   }
-  const nav = (typeof navigator !== 'undefined' && navigator.language) || 'en'
-  return nav.toLowerCase().startsWith('mn') ? 'mn' : 'en'
+  // Mongolian-first by default; visitors can switch to EN (remembered).
+  return 'mn'
 }
 
 export function LanguageProvider({ children }) {
