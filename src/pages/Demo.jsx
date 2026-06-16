@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { QUESTIONS } from '../data/questions'
 import Progress from '../components/Progress'
 import Result from '../components/Result'
+import JourneyScreen from '../components/JourneyScreen'
 import Emblem from '../components/Emblem'
 import { askKhatun, buildIntakeMessage } from '../lib/api'
 import { loadStore, updateStore, hasJourney, useKhatunStore } from '../lib/store'
@@ -13,15 +14,17 @@ const STAGE = {
   QUIZ: 'quiz',
   LOADING: 'loading',
   RESULT: 'result',
+  JOURNEY: 'journey',
   ERROR: 'error',
 }
 
-export default function Demo({ onClose }) {
+export default function Demo({ onClose, initialStage }) {
   const [step, setStep] = useState(0)
   const [answers, setAnswers] = useState({})
-  const [stage, setStage] = useState(() =>
-    hasJourney() ? STAGE.RETURNING : STAGE.QUIZ
+  const [stage, setStage] = useState(
+    () => initialStage || (hasJourney() ? STAGE.RETURNING : STAGE.QUIZ)
   )
+  const [journeyFrom, setJourneyFrom] = useState('landing')
   const [reply, setReply] = useState('')
   const [messages, setMessages] = useState([])
   const [followUps, setFollowUps] = useState([])
@@ -44,6 +47,29 @@ export default function Demo({ onClose }) {
       window.removeEventListener('keydown', onKey)
     }
   }, [onClose])
+
+  // Entering the Journey directly (landing strip) — hydrate from the store.
+  useEffect(() => {
+    if (initialStage === STAGE.JOURNEY) {
+      const s = loadStore()
+      setAnswers(s.answers || {})
+      setReply(s.reply || '')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const openJourney = (name) => {
+    const n = (name || '').trim()
+    updateStore({
+      journeyStarted: true,
+      profile: {
+        ...(store.profile || {}),
+        name: n || store.profile?.name || '',
+      },
+    })
+    setJourneyFrom('result')
+    setStage(STAGE.JOURNEY)
+  }
 
   const select = (value) => setAnswers((a) => ({ ...a, [q.id]: value }))
 
@@ -114,7 +140,9 @@ export default function Demo({ onClose }) {
 
   return (
     <div
-      className={`demo ${stage === STAGE.RESULT ? 'demo--result' : ''}`}
+      className={`demo ${
+        stage === STAGE.RESULT || stage === STAGE.JOURNEY ? 'demo--result' : ''
+      }`}
       role="dialog"
       aria-modal="true"
       aria-label={t('demo.ariaDialog')}
@@ -225,6 +253,14 @@ export default function Demo({ onClose }) {
           followUps={followUps}
           loadingFollowUp={loadingFollowUp}
           onRestart={restart}
+          onOpenJourney={openJourney}
+        />
+      )}
+
+      {stage === STAGE.JOURNEY && (
+        <JourneyScreen
+          reply={reply}
+          onBack={journeyFrom === 'result' ? () => setStage(STAGE.RESULT) : null}
           onClose={onClose}
         />
       )}

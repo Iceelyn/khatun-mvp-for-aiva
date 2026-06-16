@@ -5,8 +5,14 @@ import Demo from './pages/Demo'
 
 export default function App() {
   const [demoOpen, setDemoOpen] = useState(false)
+  const [demoStage, setDemoStage] = useState(undefined)
 
-  const openDemo = useCallback(() => setDemoOpen(true), [])
+  // openDemo() is also used as an onClick handler, so guard against the event arg.
+  const openDemo = useCallback((stage) => {
+    setDemoStage(typeof stage === 'string' ? stage : undefined)
+    setDemoOpen(true)
+  }, [])
+  const openJourney = useCallback(() => openDemo('journey'), [openDemo])
   const closeDemo = useCallback(() => setDemoOpen(false), [])
 
   return (
@@ -16,9 +22,9 @@ export default function App() {
       </a>
       <Nav onStart={openDemo} />
       <main id="main">
-        <Landing onStart={openDemo} />
+        <Landing onStart={openDemo} onJourney={openJourney} />
       </main>
-      {demoOpen && <Demo onClose={closeDemo} />}
+      {demoOpen && <Demo onClose={closeDemo} initialStage={demoStage} />}
     </>
   )
 }

@@ -3,16 +3,15 @@ import { gsap } from 'gsap'
 import Emblem from './Emblem'
 import ActionCard from './ActionCard'
 import InflationChart from './InflationChart'
-import Journey from './Journey'
 import useReducedMotion from '../hooks/useReducedMotion'
 import { parseReply, renderInline } from '../lib/parseReply'
 import { getSuggestions } from '../lib/recommendation'
 import { useT } from '../i18n/index.jsx'
 
-// Lazy gold-dust background so three.js never blocks the result render.
 const GoldDust = lazy(() => import('./GoldDust'))
 
-// Immersive, full-screen recommendation display (deep maroon + cream).
+// RESULT = the payoff only. Action card + inflation, with the long explanation
+// and the follow-up chat collapsed by default. One primary CTA → Journey.
 export default function Result({
   reply,
   answers = {},
@@ -20,10 +19,13 @@ export default function Result({
   followUps,
   loadingFollowUp,
   onRestart,
-  onClose,
+  onOpenJourney,
 }) {
   const [text, setText] = useState('')
+  const [name, setName] = useState('')
   const [usedChips, setUsedChips] = useState([])
+  const [showExplain, setShowExplain] = useState(false)
+  const [showFollow, setShowFollow] = useState(followUps.length > 0)
   const scope = useRef(null)
   const reduced = useReducedMotion()
   const { t, lang } = useT()
@@ -32,25 +34,16 @@ export default function Result({
   const suggestions = useMemo(() => getSuggestions(reply, t), [reply, lang, t])
   const chips = suggestions.filter((s) => !usedChips.includes(s))
 
-  // GSAP entrance choreography.
   useEffect(() => {
     if (reduced) return
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
-      tl.from('.result__logo', { opacity: 0, scale: 0.82, duration: 0.9 })
-        .from('.result__eyebrow', { opacity: 0, y: 14, duration: 0.6 }, '-=0.4')
-        .from(
-          '.result__body > :not(.result__divider)',
-          { opacity: 0, y: 26, duration: 0.7, stagger: 0.1 },
-          '-=0.3'
-        )
-        .from(
-          '.result__divider',
-          { scaleX: 0, opacity: 0, duration: 0.9, ease: 'power2.out', stagger: 0.12 },
-          '<0.1'
-        )
-        .from('.result__ask', { opacity: 0, y: 22, duration: 0.7 }, '-=0.3')
-        .from('.result__actions', { opacity: 0, y: 16, duration: 0.6 }, '-=0.4')
+      gsap.from('[data-rv]', {
+        opacity: 0,
+        y: 26,
+        duration: 0.7,
+        stagger: 0.12,
+        ease: 'power3.out',
+      })
     }, scope)
     return () => ctx.revert()
   }, [reduced, reply])
@@ -60,12 +53,10 @@ export default function Result({
     if (!question || loadingFollowUp) return
     onFollowUp(question)
   }
-
   const onChip = (q) => {
     setUsedChips((u) => [...u, q])
     ask(q)
   }
-
   const submit = (e) => {
     e.preventDefault()
     ask(text)
@@ -81,125 +72,157 @@ export default function Result({
       )}
 
       <div className="result__inner">
-        <header className="result__top">
-          <Emblem size={112} className="result__logo" />
+        <header className="result__top" data-rv>
+          <Emblem size={96} className="result__logo" />
           <p className="eyebrow result__eyebrow">{t('result.eyebrow')}</p>
         </header>
 
-        <ActionCard reply={reply} answers={answers} />
+        <div data-rv>
+          <ActionCard reply={reply} answers={answers} />
+        </div>
 
-        <InflationChart />
-
-        <article className="result__body">
-          {nodes.map((n, i) => {
-            if (n.type === 'divider')
-              return <span key={i} className="result__divider" aria-hidden="true" />
-            if (n.type === 'heading') {
-              if (n.level === 1) {
-                const [pre, ...rest] = n.text.split(':')
-                const title = rest.length ? rest.join(':').trim() : n.text
-                return (
-                  <h1 key={i} className="result__title">
-                    {rest.length > 0 && (
-                      <span className="result__title-eyebrow">{pre.trim()}</span>
-                    )}
-                    {title}
-                  </h1>
-                )
-              }
-              return (
-                <h2 key={i} className="result__section">
-                  {n.text}
-                </h2>
-              )
-            }
-            if (n.type === 'note')
-              return (
-                <p key={i} className="result__disclaimer">
-                  {renderInline(n.text)}
-                </p>
-              )
-            return (
-              <p key={i} className="result__p">
-                {renderInline(n.text)}
-              </p>
-            )
-          })}
-        </article>
-
-        {followUps.length > 0 && (
-          <div className="result__thread">
-            {followUps.map((f, i) => (
-              <div className="result__qa" key={i}>
-                <p className="result__question">{f.question}</p>
-                <div className="result__answer">
-                  {parseReply(f.answer).map((n, j) =>
-                    n.type === 'divider' ? (
-                      <span key={j} className="result__divider" aria-hidden="true" />
+        {/* collapsed-by-default long explanation */}
+        {nodes.length > 0 && (
+          <div className="disclosure" data-rv>
+            <button
+              className="disclosure__toggle"
+              onClick={() => setShowExplain((v) => !v)}
+              aria-expanded={showExplain}
+            >
+              {t('result.explainToggle')} <span>{showExplain ? '▴' : '▾'}</span>
+            </button>
+            {showExplain && (
+              <article className="result__body">
+                {nodes.map((n, i) => {
+                  if (n.type === 'divider')
+                    return <span key={i} className="result__divider" aria-hidden="true" />
+                  if (n.type === 'heading')
+                    return n.level === 1 ? (
+                      <h3 key={i} className="result__section">
+                        {n.text}
+                      </h3>
                     ) : (
-                      <p key={j}>{renderInline(n.text)}</p>
+                      <h3 key={i} className="result__section">
+                        {n.text}
+                      </h3>
                     )
-                  )}
-                </div>
-              </div>
-            ))}
+                  if (n.type === 'note')
+                    return (
+                      <p key={i} className="result__disclaimer">
+                        {renderInline(n.text)}
+                      </p>
+                    )
+                  return (
+                    <p key={i} className="result__p">
+                      {renderInline(n.text)}
+                    </p>
+                  )
+                })}
+              </article>
+            )}
           </div>
         )}
 
-        {loadingFollowUp && <p className="result__typing">{t('result.typing')}</p>}
-
-        <div className="result__ask">
-          {chips.length > 0 && (
-            <div className="result__chips" role="list" aria-label={t('result.suggestionsAria')}>
-              {chips.map((c) => (
-                <button
-                  key={c}
-                  type="button"
-                  className="chip"
-                  role="listitem"
-                  onClick={() => onChip(c)}
-                  disabled={loadingFollowUp}
-                >
-                  {c}
-                </button>
-              ))}
-            </div>
-          )}
-
-          <form className="result__form" onSubmit={submit}>
-            <label className="sr-only" htmlFor="followup">
-              {t('result.askAria')}
-            </label>
-            <input
-              id="followup"
-              type="text"
-              className="result__input"
-              placeholder={t('result.askPlaceholder')}
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              maxLength={300}
-              autoComplete="off"
-            />
-            <button
-              className="btn btn--gold"
-              type="submit"
-              disabled={!text.trim() || loadingFollowUp}
-            >
-              {t('result.send')}
-            </button>
-          </form>
+        <div data-rv>
+          <InflationChart />
         </div>
 
-        <Journey reply={reply} />
+        {/* collapsed-by-default follow-up */}
+        <div className="disclosure" data-rv>
+          <button
+            className="disclosure__toggle"
+            onClick={() => setShowFollow((v) => !v)}
+            aria-expanded={showFollow}
+          >
+            {t('result.followToggle')} <span>{showFollow ? '▴' : '▾'}</span>
+          </button>
+
+          {showFollow && (
+            <div className="result__ask">
+              {followUps.length > 0 && (
+                <div className="result__thread">
+                  {followUps.map((f, i) => (
+                    <div className="result__qa" key={i}>
+                      <p className="result__question">{f.question}</p>
+                      <div className="result__answer">
+                        {parseReply(f.answer).map((n, j) =>
+                          n.type === 'divider' ? (
+                            <span key={j} className="result__divider" aria-hidden="true" />
+                          ) : (
+                            <p key={j}>{renderInline(n.text)}</p>
+                          )
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {loadingFollowUp && <p className="result__typing">{t('result.typing')}</p>}
+
+              {chips.length > 0 && (
+                <div className="result__chips" role="list" aria-label={t('result.suggestionsAria')}>
+                  {chips.map((c) => (
+                    <button
+                      key={c}
+                      type="button"
+                      className="chip"
+                      role="listitem"
+                      onClick={() => onChip(c)}
+                      disabled={loadingFollowUp}
+                    >
+                      {c}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              <form className="result__form" onSubmit={submit}>
+                <label className="sr-only" htmlFor="followup">
+                  {t('result.askAria')}
+                </label>
+                <input
+                  id="followup"
+                  type="text"
+                  className="result__input"
+                  placeholder={t('result.askPlaceholder')}
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                  maxLength={300}
+                  autoComplete="off"
+                />
+                <button
+                  className="btn btn--gold"
+                  type="submit"
+                  disabled={!text.trim() || loadingFollowUp}
+                >
+                  {t('result.send')}
+                </button>
+              </form>
+            </div>
+          )}
+        </div>
 
         <p className="result__disclaimer-bar">{t('result.disclaimerBar')}</p>
 
-        <div className="result__actions">
-          <button className="btn btn--ghost result__btn-ghost" onClick={onRestart}>
-            {t('result.restart')}
+        {/* one primary CTA → Journey, with a quiet folded save */}
+        <div className="result__cta-zone" data-rv>
+          <input
+            className="result__name-input"
+            type="text"
+            placeholder={t('result.saveNamePh')}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            maxLength={40}
+            autoComplete="off"
+            aria-label={t('result.saveNamePh')}
+          />
+          <button className="btn btn--primary result__journey-cta" onClick={() => onOpenJourney(name)}>
+            {t('result.journeyCta')} →
           </button>
-          <button className="btn btn--gold" onClick={onClose}>
-            {t('result.finish')}
+          <p className="result__save-hint">{t('result.saveHint')}</p>
+          <button className="result__restart-link" onClick={onRestart}>
+            {t('result.restart')}
           </button>
         </div>
       </div>
