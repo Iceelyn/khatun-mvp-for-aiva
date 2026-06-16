@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect, useRef } from 'react'
-import Emblem from './Emblem'
+import CrownSVG from './CrownSVG'
 import useReducedMotion from '../hooks/useReducedMotion'
 
 // Optional assets — resolved at build time ONLY if the file exists, so a missing
@@ -55,7 +55,7 @@ export default function CrownHero() {
               pngUrl ? (
                 <img src={pngUrl} className="crown__img" alt="" aria-hidden="true" />
               ) : (
-                <Emblem size={140} className="crown__placeholder" alt="" />
+                <CrownSVG className="crown__img crown__placeholder" />
               )
             }
           >
@@ -64,11 +64,7 @@ export default function CrownHero() {
         ) : pngUrl ? (
           <img src={pngUrl} className="crown__img" alt="Хатун титэм" />
         ) : (
-          <Emblem
-            size={isSmall ? 116 : 150}
-            className="crown__placeholder"
-            alt="Хатун"
-          />
+          <CrownSVG className="crown__img crown__placeholder" />
         )}
         <span className="crown__shimmer" aria-hidden="true" />
       </div>
