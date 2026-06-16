@@ -4,10 +4,12 @@ import Stat from '../sections/Stat'
 import Promises from '../sections/Promises'
 import ClosingCTA from '../sections/ClosingCTA'
 import Footer from '../sections/Footer'
+import ReturnStrip from '../components/ReturnStrip'
 
-export default function Landing({ onStart }) {
+export default function Landing({ onStart, onJourney }) {
   return (
     <>
+      <ReturnStrip onContinue={onJourney} />
       <Hero onStart={onStart} />
       <Problem />
       <Stat />
