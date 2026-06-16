@@ -1,0 +1,26 @@
+# Netlify deploy config for Khatun.
+# Set ANTHROPIC_API_KEY in: Site settings → Environment variables.
+
+[build]
+  command = "npm install && npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Frontend calls /api/chat → serverless function (must come BEFORE the SPA fallback).
+[[redirects]]
+  from = "/api/chat"
+  to = "/.netlify/functions/chat"
+  status = 200
+  force = true
+
+# SPA fallback for the single-page app.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
