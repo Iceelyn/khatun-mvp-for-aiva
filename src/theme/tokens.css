@@ -33,9 +33,9 @@
   --hairline: rgba(122, 15, 28, 0.16);
   --hairline-gold: rgba(199, 163, 90, 0.5);
 
-  /* type families */
-  --f-display: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
-  --f-serif: 'Cormorant Garamond', Georgia, serif;
+  /* type families — Noto Serif Display has full Mongolian Cyrillic (ү ө) */
+  --f-display: 'Noto Serif Display', Georgia, 'Times New Roman', serif;
+  --f-serif: 'Noto Serif Display', Georgia, serif;
   --f-body: 'Inter', system-ui, -apple-system, sans-serif;
 
   /* fluid type scale */
