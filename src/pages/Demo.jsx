@@ -7,6 +7,7 @@ import Emblem from '../components/Emblem'
 import { askKhatun, buildIntakeMessage } from '../lib/api'
 import { loadStore, updateStore, hasJourney, useKhatunStore } from '../lib/store'
 import { detectProduct } from '../lib/recommendation'
+import { detectDistress } from '../lib/safety'
 import { useT, format } from '../i18n/index.jsx'
 
 const STAGE = {
@@ -118,14 +119,15 @@ export default function Demo({ onClose, initialStage }) {
 
   const onFollowUp = async (question) => {
     setLoadingFollowUp(true)
+    const distress = detectDistress(question)
     const userMsg = { role: 'user', content: question }
     const convo = [...messages, userMsg]
     try {
       const text = await askKhatun(convo, lang)
       setMessages([...convo, { role: 'assistant', content: text }])
-      setFollowUps((f) => [...f, { question, answer: text }])
+      setFollowUps((f) => [...f, { question, answer: text, distress }])
     } catch (err) {
-      setFollowUps((f) => [...f, { question, answer: t('result.followError') }])
+      setFollowUps((f) => [...f, { question, answer: t('result.followError'), distress }])
     } finally {
       setLoadingFollowUp(false)
     }

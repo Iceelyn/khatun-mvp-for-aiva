@@ -15,8 +15,8 @@ export const colors = {
 }
 
 export const fonts = {
-  display: "'Playfair Display', 'Cormorant Garamond', Georgia, serif",
-  serif: "'Cormorant Garamond', Georgia, serif",
+  display: "'Noto Serif Display', Georgia, serif",
+  serif: "'Noto Serif Display', Georgia, serif",
   body: "'Inter', system-ui, -apple-system, sans-serif",
 }
 

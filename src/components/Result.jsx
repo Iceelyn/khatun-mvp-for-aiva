@@ -3,6 +3,7 @@ import { gsap } from 'gsap'
 import Emblem from './Emblem'
 import ActionCard from './ActionCard'
 import InflationChart from './InflationChart'
+import HowItWorks from './HowItWorks'
 import useReducedMotion from '../hooks/useReducedMotion'
 import { parseReply, renderInline } from '../lib/parseReply'
 import { getSuggestions } from '../lib/recommendation'
@@ -144,6 +145,12 @@ export default function Result({
                   {followUps.map((f, i) => (
                     <div className="result__qa" key={i}>
                       <p className="result__question">{f.question}</p>
+                      {f.distress && (
+                        <div className="safety-note" role="note">
+                          <strong>{t('safety.title')}</strong>
+                          <p>{t('safety.body')}</p>
+                        </div>
+                      )}
                       <div className="result__answer">
                         {parseReply(f.answer).map((n, j) =>
                           n.type === 'divider' ? (
@@ -201,6 +208,10 @@ export default function Result({
               </form>
             </div>
           )}
+        </div>
+
+        <div data-rv>
+          <HowItWorks />
         </div>
 
         <p className="result__disclaimer-bar">{t('result.disclaimerBar')}</p>
