@@ -46,6 +46,7 @@ export default function ActionCard({ reply, answers = {} }) {
       <div className="action-card__amount">
         <span className="action-card__amount-label">{t('actionCard.amountLabel')}</span>
         <p>{amount}</p>
+        <p className="action-card__amount-note">⚠ {t('actionCard.amountNote')}</p>
       </div>
 
       <ol className="action-card__steps">

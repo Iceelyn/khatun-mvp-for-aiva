@@ -122,6 +122,20 @@ export const dict = {
       saveNamePh: 'Нэр (заавал биш)',
       saveHint: 'Хадгалах шаардлагагүй — хүссэн үедээ буцаж болно.',
     },
+    howItWorks: {
+      title: 'Khatun AI хэрхэн ажилладаг',
+      items: [
+        'Энэ бол AI туслах — найрсаг чиглүүлэг өгдөг.',
+        'Зөвхөн Монголд бодитоор байдаг, баталгаатай бүтээгдэхүүнийг л санал болгоно.',
+        'Тодорхой хүү, үнэ, тоог хэзээ ч зохиодоггүй — банк/брокерээсээ шалгахыг хэлдэг.',
+        'Лицензтэй санхүүгийн зөвлөгөө биш. Эцсийн шийдвэр чинийх.',
+        'Нэвтрэх шаардлагагүй. Таны хуваалцсан зүйлийг хэн нэгэнд зардаггүй, дамжуулдаггүй.',
+      ],
+    },
+    safety: {
+      title: 'Чи ганцаараа биш 💛',
+      body: 'Хэрэв чамд хэцүү байгаа бол — мөнгө хүлээж чадна. Итгэдэг хүндээ, эсвэл ойр дотныхондоо хандаарай. Khatun бол хямралын тусламжийн үйлчилгээ биш.',
+    },
     journeyScreen: {
       header: 'Таны аялал',
       eyebrow: 'Чиний хамтрагч',
@@ -143,7 +157,8 @@ export const dict = {
       amountLabel: 'Тав тухтай эхлэх хэмжээ',
       done: 'Хийсэн',
       doneState: '✓ Хийсэн',
-      why: 'Яагаад энэ вэ?',
+      why: 'Яагаад энэ гэж?',
+      amountNote: 'Тодорхой хүү, үнэ, доод хязгаарыг банк/брокерээсээ шалгаарай.',
       amount: {
         barely:
           'Маш жижиг дүн — нэг аяга кофены үнэ ч болов. Гол нь зуршил болгох.',
@@ -398,6 +413,20 @@ export const dict = {
       saveNamePh: 'Name (optional)',
       saveHint: 'No need to save — come back anytime.',
     },
+    howItWorks: {
+      title: 'How Khatun AI works',
+      items: [
+        "It's an AI guide — it offers friendly guidance.",
+        'It only recommends verified products that actually exist in Mongolia.',
+        'It never invents rates, prices or figures — it tells you to check with your bank/broker.',
+        'It is not licensed financial advice. The final choice is yours.',
+        'No login required. Nothing you share is sold or shared with anyone.',
+      ],
+    },
+    safety: {
+      title: 'You are not alone 💛',
+      body: "If things feel hard right now — money can wait. Please reach out to someone you trust or people close to you. Khatun is not a crisis support service.",
+    },
     journeyScreen: {
       header: 'Your journey',
       eyebrow: 'Your companion',
@@ -420,6 +449,7 @@ export const dict = {
       done: 'Done',
       doneState: '✓ Done',
       why: 'Why this?',
+      amountNote: 'Check the exact rate, price or minimum with your bank/broker.',
       amount: {
         barely:
           'A very small amount — even the price of one coffee. The point is to build the habit.',

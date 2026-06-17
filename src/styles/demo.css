@@ -1191,3 +1191,52 @@
     right: 1rem;
   }
 }
+
+/* --- responsible-AI: anti-hallucination note, how-it-works, safety --- */
+.action-card__amount-note {
+  margin-top: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--c-gold-ink);
+  max-width: none;
+}
+.howitworks {
+  list-style: none;
+  padding: 1.25rem 0.25rem 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  animation: qFade 0.4s var(--ease);
+}
+.howitworks li {
+  position: relative;
+  padding-left: 1.6rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: rgba(245, 237, 232, 0.9);
+}
+.howitworks li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--c-gold-soft);
+  font-weight: 700;
+}
+.safety-note {
+  margin: 0 0 1rem;
+  padding: 1rem 1.25rem;
+  background: rgba(199, 163, 90, 0.12);
+  border: 1px solid var(--c-gold);
+  border-radius: var(--r-md);
+}
+.safety-note strong {
+  display: block;
+  color: var(--c-gold-soft);
+  margin-bottom: 0.35rem;
+}
+.safety-note p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--c-cream);
+  max-width: none;
+}
